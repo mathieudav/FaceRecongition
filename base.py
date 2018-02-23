@@ -7,13 +7,12 @@ Created on Fri Feb  2 16:52:41 2018
 """
 import numpy as np
 import cv2
-import skimage.io as skio
 import pandas as pd
 import os
 
 #répertoire par défault
-os.chdir("/home/francois/Documents/SIR/Challenge/")
-
+#os.chdir("/home/francois/Documents/SIR/Challenge/")
+os.chdir("/usr/users/promo2017/daviet_mat/FaceRecognitionData/")
 
 
 #classe permettant d'exploiter la base d'images
