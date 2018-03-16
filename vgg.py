@@ -8,7 +8,9 @@ import numpy as np
 import math
 from scipy.io import loadmat
 import os
+os.environ["THEANO_FLAGS"]="device=cuda0,floatX=float32"
 os.environ["KERAS_BACKEND"]="tensorflow"
+
 from keras.models import Sequential, Model
 from keras.layers import Input, Dense, Flatten, Dropout, Activation, Lambda, Permute, Reshape
 from keras.layers import Convolution2D, ZeroPadding2D, MaxPooling2D
@@ -64,16 +66,15 @@ class vgg:
         copy_mat_to_keras(model,data)
         self.featureModel=Model(inputs=model.layers[0].input, outputs=model.layers[-2].output)
         
-    def get_img_features(self,crpimg):    
-        imarr = np.array(crpimg).astype(np.float32)
+    def get_img_features(self,list_crpimg):    
+        list_imarr = [np.array(crpimg).astype(np.float32) for crpimg in list_crpimg]
     
-        imarr = np.expand_dims(imarr, axis=0)
+        #list_imarr = [np.expand_dims(imarr, axis=0) for imarr in list_imarr]
         
     
-        fvec =self.featureModel.predict(imarr)[0,:]
-
-        normfvec = math.sqrt(fvec.dot(fvec))
-        return fvec/normfvec
+        list_fvec =self.featureModel.predict(np.array(list_imarr),batch_size=128,verbose=1)
+        
+        return list_fvec
         
     def __get_vgg_model(self):
         mdl = Sequential()
@@ -119,13 +120,15 @@ if __name__=="__main__":
     vgg_test=vgg()
     
     
-    list_img=base_img.web_images_from_people_id("337")
+    list_img=[cv2.imread(img_path,1) for img_path in base_img.web_images_from_people_id("337")]
+    list_img=[cv2.resize(img,(224,224)) for img in list_img]
     list_img_features=[]
     for img in list_img[:5]:
-        crp=img
-        crp.resize(224,224,3)
-        cv2.imshow('img',crp)
+        cv2.imshow('img',img)
         cv2.waitKey(0)  & 0xFF
-        list_img_features.append(vgg_test.get_img_features(crp))
+    list_img_features=vgg_test.get_img_features(list_img)
     cv2.destroyAllWindows()
+
+    
+    
     

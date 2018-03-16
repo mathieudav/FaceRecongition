@@ -1,14 +1,13 @@
 # -*- coding: utf-8 -*-
 """
 Éditeur de Spyder
-
 Ceci est un script temporaire.
 """
 import numpy as np
 import cv2
 from base import base
 import time
-import affine
+import face_recog
 class faceDetector:
     def __init__(self):
         
@@ -23,8 +22,8 @@ class faceDetector:
     def detect_face(self,img):
         self.img=img
         self.gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
-        self.faces = self.face_cascade.detectMultiScale(self.gray, 1.3, 5)
-        self.profile=self.profile_cascade.detectMultiScale(self.gray, 1.3, 5)
+        self.faces = self.face_cascade.detectMultiScale(self.gray, 1.3, 8)
+        self.profile=self.profile_cascade.detectMultiScale(self.gray, 1.3, 8)
         
         self.nb_faces=len(self.faces)
         print(self.nb_faces)
@@ -52,21 +51,23 @@ class faceDetector:
 if __name__=="__main__":
     test=base()
 
-    list_img=test.web_images_from_people_id("334")
+    list_img=[cv2.imread(img_path,1) for img_path in test.track_images_from_track_id('104_177',False)]
+
     fd=faceDetector()
 #    faces=[]
     faces=np.zeros([len(list_img),224,224,3],dtype=np.uint8)  
     i=0
-    for img in list_img[:]:
+    for img in list_img:
 #        face=cv2.imread(img).astype('uint8') 
         fd.detect_face(img)
         imgf=fd.get_faces()
         imgf=cv2.resize(imgf,(224,224))
         faces[i]=imgf
         i=i+1
-#        cv2.imshow('img',imgf)
-#        cv2.waitKey(0)  & 0xFF
-    face_affine=affine.face_alignment(faces)
+        cv2.imshow('img',imgf)
+        cv2.waitKey(0)  & 0xFF
+    face_affine=face_recog.face_alignment(faces)
+    
     for img in face_affine[:]:
         cv2.imshow('affine',img)
         cv2.waitKey(0)  & 0xFF

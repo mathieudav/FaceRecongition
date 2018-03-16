@@ -16,11 +16,10 @@ def face_alignment(faces):
     note: width must equal to height 
     '''  
     print(len(faces))  
-    if len(faces)==4 and faces[0].shape[3]==1:  
-        faces = faces.reshape(faces.shape[:-1]) # if gray, turns to num * width * height, no channel axis 如果是灰度图，去掉最后一维，否则predictor会报错  
+
     num = len(faces)  
       
-    faces_aligned = np.zeros((len(faces),faces[0].shape),dtype=np.uint8)  
+    faces_aligned = np.zeros((len(faces),*faces[0].shape),dtype=np.uint8)  
     
     predictor_path = "./shape_predictor_68_face_landmarks.dat" # dlib提供的训练好的68个人脸关键点的模型，网上可以下  
     predictor = dlib.shape_predictor(predictor_path) # 用来预测关键点  
