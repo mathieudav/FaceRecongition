@@ -38,9 +38,9 @@ def load_preprocess_data(tup):
     img=cv2.imread(img_path,1)
 #    fd.detect_face(img)
 #    imgf=fd.get_faces()
-#    
-#    if None==imgf:
-#        print(" pas de faces détectées : {} ".format(img_path))
+    
+#    if imgf.any():
+#        #print(" pas de faces détectées : {} ".format(img_path))
 #        return
 #    else:
 #        resized_img=cv2.resize(img,(224,224))
@@ -97,7 +97,7 @@ for batch in split_array(training_data_set_people,number_of_batch):
 t2=time() 
 print("Loaded and computed features on training data in  %0.3fs" % (t2 - t1))
 
-test_data_set=[(img_path,None) for track_id in os.listdir("input_testing") for img_path in base_img.track_images_from_track_id(track_id,False) if img_path!=None ]
+test_data_set=[(img_path,track_id) for track_id in os.listdir("input_testing") for img_path in base_img.track_images_from_track_id(track_id,False) if img_path!=None ]
 X_test=[]
 
 i=len(test_data_set)

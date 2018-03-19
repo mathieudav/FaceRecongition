@@ -26,7 +26,7 @@ class faceDetector:
         self.profile=self.profile_cascade.detectMultiScale(self.gray, 1.3, 8)
         
         self.nb_faces=len(self.faces)
-        print(self.nb_faces)
+        #print(self.nb_faces)
 
     def get_faces(self):
         for (x,y,w,h) in self.faces:

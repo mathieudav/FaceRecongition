@@ -15,7 +15,7 @@ def face_alignment(faces):
     faces: num * width * height * channels ,value = 0~255, dtype = np.uint8,  
     note: width must equal to height 
     '''  
-    print(len(faces))  
+    #print(len(faces))  
 
     num = len(faces)  
       
