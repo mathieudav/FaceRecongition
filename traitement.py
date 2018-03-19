@@ -27,6 +27,7 @@ from sklearn.cluster import KMeans
 from time import time
 
 from multiprocessing import Pool
+import pickle
 
 base_img=base.base()
 fd=faceDetection.faceDetector()
@@ -112,6 +113,20 @@ for batch in split_array(test_data_set,number_of_batch):
     
 t3=time()
 print("Loaded and computed features on training data in  %0.3fs" % (t3 - t2))
+
+
+with open("X_train_tracks.pickle","wb") as f:
+    pickle.dump(X_train_tracks,f)
+with open("y_train_tracks.pickle","wb") as f:
+    pickle.dump(y_train_tracks,f)
+with open("X_train_people.pickle","wb") as f:
+    pickle.dump(X_train_people,f)
+with open("y_train_people.pickle","wb") as f:
+    pickle.dump(y_train_people,f)
+with open("X_test.pickle","wb") as f:
+    pickle.dump(X_test,f)
+with open("X_test.pickle","wb") as f:
+    pickle.dump(X_test,f)
 
 """
 t0 = time()
