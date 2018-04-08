@@ -5,28 +5,19 @@ Created on Wed Mar 21 21:49:49 2018
 @author: Mathieu Daviet
 """
 
+import get_data as gd
+import manage_data as md
+import cls
 
-from utils import *
+[X_train, X_people, X_test, y_train] = gd.get_mean_data(test_data = True);
 
-X_people = get_saved_features("FaceRecongition_feature/X_train_people", flatten = True)
-X_tracks = get_saved_features("FaceRecongition_feature/means/X_train_tracks_means.pkl")
-X_test = get_saved_features("FaceRecongition_feature/means/X_test_means.pkl")
-y_people = get_saved_features("FaceRecongition_feature/y_train_people", flatten = True)
-y_tracks = get_saved_features("FaceRecongition_feature/means/y_train_tracks_means.pkl")
-y_test = get_saved_features("FaceRecongition_feature/means/y_test_means.pkl")
+save_lines = []
+for i in range(len(X_test)):
+    closest_people = cls.get_closest_people(X_test[i][0], X_train, y_train, X_people,1, distance = "braycurtis")
+    save_lines.append(','.join([X_test[i][1], str(int(closest_people))]))
 
-list_Tracks_test = list(sorted(get_list_tracks(y_test)))
-
-test_tracks_length = len(list_Tracks_test)
-
-itera = 1
-save_lines = ["[track_id],[people_id]"]
-for idtrack in list_Tracks_test:
-    print(str(itera) + "/" + str(test_tracks_length))
-    itera += 1
-    closest_person = get_closest_people(idtrack, X_test, y_test, X_tracks, y_tracks, X_people, y_people)
-    save_lines.append(','.join([str(idtrack), str(closest_person)]))
-    
+save_lines = list(sorted(save_lines))
+save_lines.insert(0, "[track_id],[people_id]")
 #Sauvegarde du fichier
 with open('submit_file.csv', 'w') as f:
     f.write('\n'.join(save_lines))

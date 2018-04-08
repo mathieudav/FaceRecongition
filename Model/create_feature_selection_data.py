@@ -10,13 +10,14 @@ import numpy as np
 import pickle
 
 #[X_people] = get_saved_features("FaceRecongition_feature/scaled/X_train_people_scaled.pkl")
-[X_tracks] = get_saved_features("FaceRecongition_feature/scaled/X_train_tracks_scaled.pkl")
+X_tracks = get_saved_features("FaceRecongition_feature/means/X_train_tracks_means.pkl")
 #y_people = get_saved_features("FaceRecongition_feature/y_train_people", flatten = True)
-y_tracks = get_saved_features("FaceRecongition_feature/y_train_tracks", flatten = True)
+y_tracks = get_saved_features("FaceRecongition_feature/means/y_train_tracks_means.pkl")
 
 list_Tracks = get_list_tracks(y_tracks)
 test_tracks_length = len(list_Tracks)
 
+print(len(X_tracks))
 
 diff_features = [0.]*len(X_tracks[0])
 
